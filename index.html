@@ -96,7 +96,7 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
 /* Stat tiles */
 .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .tile { background: var(--shade); border-radius: 20px; padding: 28px; }
-.tile .num { font-family: var(--display); font-size: clamp(52px, 6vw, 80px); line-height: 1; font-variant-numeric: tabular-nums; }
+.tile .num { font-family: var(--display); font-size: clamp(44px, 4.6vw, 72px); line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tile p { margin: 10px 0 0; line-height: 1.5; color: var(--muted); }
 .tile.dark { background: var(--green); color: var(--cream); }
 .tile.dark .num { color: var(--coral); }
@@ -124,13 +124,52 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
 .cols h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; }
 .cols p { margin: 10px 0 0; line-height: 1.7; }
 
+/* Intro overlay */
+.intro { position: fixed; inset: 0; z-index: 100; background: var(--green); color: var(--cream); display: flex; flex-direction: column; justify-content: center; padding: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px)); transform-origin: calc(100% - 90px) calc(100% - 44px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.6, 0, 0.3, 1); cursor: pointer; }
+.intro.leaving { opacity: 0; transform: scale(0.06); }
+.intro-inner { max-width: 1000px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: clamp(20px, 3vw, 36px); }
+.intro-line { margin: 0; font-family: var(--display); font-size: clamp(30px, 4.4vw, 58px); line-height: 1.12; text-wrap: balance; opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.intro-line.show { opacity: 1; transform: none; }
+.intro-last { color: var(--coral); }
+.intro-skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); top: max(24px, env(safe-area-inset-top, 0px)); background: transparent; color: var(--cream); border: 1px solid rgba(248, 241, 228, 0.5); border-radius: 999px; padding: 11px 20px; font: 500 15px var(--body); cursor: pointer; }
+.intro-skip:hover { background: rgba(248, 241, 228, 0.12); }
+.intro-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(248, 241, 228, 0.15); }
+.intro-bar span { display: block; height: 100%; width: 0; background: var(--coral); }
+.intro-reopen { position: fixed; z-index: 30; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 8px; background: var(--coral); color: var(--green); border: 0; border-radius: 999px; padding: 12px 18px; font: 600 14px var(--body); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22); cursor: pointer; animation: reopen-in 0.4s ease; }
+.intro-reopen:hover { background: var(--cream); }
+@keyframes reopen-in { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
+html.intro-open { overflow: hidden; }
+
+/* Home: who this site is for */
+.audiences { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 32px; }
+.aud-card { background: var(--shade); border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; }
+.aud-photo img { width: 100%; height: 260px; object-fit: cover; display: block; }
+.aud-photo.noimg { display: none; }
+.aud-body { padding: 28px 32px 32px; display: flex; flex-direction: column; flex: 1; }
+.aud-body h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.15; }
+.aud-body p { margin: 12px 0 0; font-size: 18px; line-height: 1.7; color: var(--muted); flex: 1; }
+.aud-body .btn { align-self: flex-start; margin-top: 24px; }
+
 /* Photos: files live in the images/ folder next to index.html.
    If a photo is missing, its box gets .noimg and falls back cleanly. */
 .photo-band { position: relative; height: clamp(280px, 36vw, 460px); overflow: hidden; background: var(--green); }
-.photo-band img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-band img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.8); }
 .photo-band.noimg { display: none; }
-.photo-caption { position: absolute; left: 0; right: 0; bottom: 0; padding-block: 96px 36px; background: linear-gradient(to top, rgba(16, 32, 20, 0.85), rgba(16, 32, 20, 0)); color: var(--cream); }
-.photo-caption p { margin: 0; font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); line-height: 1.2; max-width: 32ch; }
+.photo-band img.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s ease; }
+.photo-band img.slide.on { opacity: 1; }
+
+/* Issue: cycle diagram */
+.cycle-fig { margin: 0; background: #FFFFFF; border-radius: 22px; padding: 24px; justify-self: center; width: 100%; max-width: 681px; }
+.cycle-fig img { display: block; width: 100%; max-width: 633px; height: auto; margin: 0 auto; }
+.cycle-fig figcaption { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; }
+
+/* Dark band with a dimmed photo behind it */
+.band.photo-bg { position: relative; overflow: hidden; }
+.band-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.band.photo-bg::before { content: ""; position: absolute; inset: 0; z-index: 1; background: rgba(22, 46, 27, 0.84); }
+.band.photo-bg > .wrap { position: relative; z-index: 2; }
+.photo-caption { position: absolute; left: 0; right: 0; bottom: 0; padding-block: 140px 36px; background: linear-gradient(to top, rgba(16, 32, 20, 0.92) 0%, rgba(16, 32, 20, 0.7) 45%, rgba(16, 32, 20, 0) 100%); color: var(--cream); }
+.photo-caption p { text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); margin: 0; font-family: var(--display); font-size: clamp(24px, 2.8vw, 36px); line-height: 1.2; max-width: 32ch; }
 
 /* Issue: Why it matters carousel */
 .car-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 32px; }
@@ -151,15 +190,30 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
 .why-text h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(28px, 2.6vw, 36px); line-height: 1.1; }
 .why-text p { margin: 0; max-height: 0; opacity: 0; overflow: hidden; font-size: 16px; line-height: 1.6; color: #E8EDE3; transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease; }
 .why-hint { margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: var(--coral); }
-.why-card:hover .why-shade, .why-card:focus-visible .why-shade { background-color: rgba(16, 32, 20, 0.72); }
-.why-card:hover img, .why-card:focus-visible img { transform: scale(1.05); }
-.why-card:hover .why-text p, .why-card:focus-visible .why-text p { max-height: 340px; opacity: 1; margin-top: 12px; }
-.why-card:hover .why-hint, .why-card:focus-visible .why-hint { display: none; }
+/* Cards with a button keep the paragraph and button together in .why-more */
+.why-more { max-height: 0; opacity: 0; overflow: hidden; visibility: hidden; transition: max-height 0.5s ease, opacity 0.4s ease, visibility 0.4s; }
+.why-more p { max-height: none; opacity: 1; margin-top: 12px; }
+.why-btn { margin-top: 18px; background: var(--coral); color: var(--green); font-weight: 600; }
+.why-btn:hover { background: var(--cream); color: var(--green); }
+.why-stat { font-family: var(--display); font-size: clamp(56px, 5.4vw, 80px); line-height: 0.95; color: var(--coral); white-space: nowrap; margin-bottom: 6px; }
+.why-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.2em; color: var(--coral); margin-bottom: 8px; }
+.why-card:hover .why-shade, .why-card:focus-visible .why-shade, .why-card:focus-within .why-shade { background-color: rgba(16, 32, 20, 0.72); }
+.why-card:hover img, .why-card:focus-visible img, .why-card:focus-within img { transform: scale(1.05); }
+.why-card:hover .why-text p, .why-card:focus-visible .why-text p, .why-card:focus-within .why-text p { max-height: 340px; opacity: 1; margin-top: 12px; }
+.why-card:hover .why-more, .why-card:focus-visible .why-more, .why-card:focus-within .why-more { max-height: 400px; opacity: 1; visibility: visible; }
+.why-card:hover .why-hint, .why-card:focus-visible .why-hint, .why-card:focus-within .why-hint { display: none; }
 @media (hover: none) {
   .why-shade { background-color: rgba(16, 32, 20, 0.6); }
   .why-text p { max-height: none; opacity: 1; margin-top: 12px; }
+  .why-more { max-height: none; opacity: 1; visibility: visible; }
   .why-hint { display: none; }
 }
+
+/* Home: grids of hover cards */
+.hgrid { display: grid; gap: 20px; margin-top: 32px; }
+.hgrid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.hgrid.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hgrid .why-card { height: clamp(380px, 36vw, 480px); }
 
 /* Green Forks: top photo (plate drawing shows if the photo is missing) */
 .gf-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 24px; display: block; }
@@ -220,7 +274,7 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
 /* Tablet and phone */
 @media (max-width: 900px) {
   .two, .two.wide-left, .two.wide-right, .two.stat-split { grid-template-columns: minmax(0, 1fr); }
-  .cols { grid-template-columns: minmax(0, 1fr); }
+  .cols, .audiences, .hgrid.three, .hgrid.two-up { grid-template-columns: minmax(0, 1fr); }
   .seats { justify-self: start; }
   .car-track { grid-auto-columns: calc((100% - 20px) / 1.5); }
   /* Route turns into a vertical list with the descriptions always showing */
@@ -242,16 +296,38 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
   .tiles { grid-template-columns: minmax(0, 1fr); }
   .seats { gap: 8px; }
   .car-track { grid-auto-columns: 85%; }
+  .hgrid .why-card { height: 460px; }
+  .why-shade { background-color: rgba(16, 32, 20, 0.6); }
+  .why-text p { max-height: none; opacity: 1; margin-top: 12px; }
+  .why-more { max-height: none; opacity: 1; visibility: visible; }
+  .why-hint { display: none; }
   :root { --header-h: 112px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .seat, .hero-tint, .hero h1, .why-card img, .why-shade, .why-text p, .stop-card { transition: none; }
+  .seat, .hero-tint, .hero h1, .why-card img, .why-shade, .why-text p, .why-more, .stop-card { transition: none; }
   .car-track { scroll-behavior: auto; }
+  .intro, .intro-line { transition: none; }
+  .intro-reopen { animation: none; }
   .route.drawn .stop-btn { animation: none; }
 }
 </style>
 </head>
 <body>
+
+<!-- Intro overlay: shows on load, then shrinks into the corner button -->
+<div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-q1" hidden>
+  <div class="intro-inner">
+    <p class="intro-line" id="intro-q1">Have you ever thrown away food after an event?</p>
+    <p class="intro-line">Do you ever worry about where your next lunch or dinner is coming from?</p>
+    <p class="intro-line intro-last">What if one solution could address <em>both</em> problems?</p>
+  </div>
+  <button class="intro-skip" id="intro-skip" type="button">Enter site</button>
+  <div class="intro-bar" aria-hidden="true"><span id="intro-progress"></span></div>
+</div>
+<button class="intro-reopen" id="intro-reopen" type="button" hidden>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 .8c0 1.8-2.5 2.3-2.5 3.8"/><path d="M12 17.2h.01"/></svg>
+  Replay intro
+</button>
 
 <header class="site-header">
   <div class="wrap">
@@ -292,8 +368,7 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
       <div>
         <div class="eyebrow">THE BIG PICTURE</div>
         <h2 class="h2">Good food gets thrown out. <em class="red">Students go hungry.</em></h2>
-        <p class="body">Food insecurity is when a person does not have reliable access to enough affordable, nutritious food. In 2020, about 23% of U.S. college students, or roughly 3.8 million people, experienced it. For many of these students, this means regularly skipping meals or relying on cheaper, less nutritious food in order to stay within their budget.</p>
-        <p class="body">At the same time, a large amount of food on college campuses goes to waste. At Georgia Tech, catered events such as lectures, info sessions, and club meetings often end with leftover food that ends up in the trash. Green Forks was created to address both of these problems by connecting surplus event food with the students who need it.</p>
+        <p class="body">Food insecurity means not having reliable access to enough affordable, nutritious food. In 2020, it affected about 23% of U.S. college students, roughly 3.8 million people. At the same time, catered events at Georgia Tech often end with leftover food going in the trash. Green Forks addresses both problems by connecting that surplus food with the students who need it.</p>
       </div>
       <div class="tiles">
         <div class="tile">
@@ -309,13 +384,50 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
   </section>
 
   <section class="photo-band" data-imgbox aria-label="Photo">
-    <img src="images/home-event.jpg" alt="Leftover catering trays on a table after a campus event" onerror="this.closest('[data-imgbox]').classList.add('noimg')">
+    <img class="slide on" src="images/home-waste.webp" alt="A trash bin filled with thrown-out rice, chicken, quesadillas, and vegetables" onerror="this.remove()">
+    <img class="slide" src="images/home-waste-2.webp" alt="A dining hall tray return line covered in half-eaten plates and drinks" onerror="this.remove()">
     <div class="photo-caption">
       <div class="wrap"><p>Catered events across campus often end with food that could still feed students.</p></div>
     </div>
   </section>
 
   <section class="band alt">
+    <div class="wrap">
+      <div class="eyebrow">WHO THIS SITE IS FOR</div>
+      <h2 class="h2">Two audiences, one habit to build.</h2>
+      <p class="body" style="max-width: 68ch">This site shows both groups that the problem is real, that the fix already works on campus, and the one action that helps most.</p>
+      <div class="hgrid two-up">
+        <article class="why-card" data-imgbox>
+          <img src="images/home-students.jpg" alt="Georgia Tech students eating together in a dining hall" style="object-position: 60% center" onerror="this.closest('[data-imgbox]').classList.add('noimg')">
+          <div class="why-shade"></div>
+          <div class="why-text">
+            <div class="why-eyebrow">STUDENTS</div>
+            <h3>Stretching a food budget?</h3>
+            <div class="why-hint">HOVER TO READ</div>
+            <div class="why-more">
+              <p>Any Georgia Tech student who sometimes struggles to afford meals. A free meal from a campus event is often a short walk away.</p>
+              <a class="btn why-btn" href="#involved" data-role="0">How to get meal alerts</a>
+            </div>
+          </div>
+        </article>
+        <article class="why-card" data-imgbox>
+          <img src="images/home-hosts.png" alt="Students packing leftover food from serving trays into to-go containers" onerror="this.closest('[data-imgbox]').classList.add('noimg')">
+          <div class="why-shade"></div>
+          <div class="why-text">
+            <div class="why-eyebrow">EVENT HOSTS</div>
+            <h3>Ordering catering?</h3>
+            <div class="why-hint">HOVER TO READ</div>
+            <div class="why-more">
+              <p>Faculty, staff, and student leaders who plan seminars, club meetings, and receptions. A two-minute form decides whether leftovers feed people or fill a bin.</p>
+              <a class="btn why-btn" href="#involved" data-role="1">How to share leftovers</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
     <div class="wrap two wide-right">
       <div class="sdg-tile" aria-hidden="true">
         <div class="label">UN GOAL</div>
@@ -325,8 +437,7 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
       <div>
         <div class="eyebrow">UN SUSTAINABLE DEVELOPMENT GOAL 2</div>
         <h2 class="h2">A world where no one goes hungry.</h2>
-        <p class="body">The Sustainable Development Goals (SDGs) are a set of 17 goals adopted by all United Nations member states in 2015. Each goal focuses on a different global challenge, such as poverty, education, and climate, and together they serve as a shared plan for building a more sustainable future by 2030.</p>
-        <p class="body">Goal 2, Zero Hunger, focuses on ending hunger, improving nutrition, and promoting sustainable agriculture. One of its main targets is to make sure that by 2030, all people, especially those in vulnerable situations, have access to safe, nutritious, and sufficient food all year round. While hunger is often thought of as a global issue, it is also present on college campuses, including Georgia Tech.</p>
+        <p class="body">The Sustainable Development Goals (SDGs) are 17 goals adopted by all United Nations member states in 2015 as a shared plan for a more sustainable future by 2030. Goal 2, Zero Hunger, aims to make sure everyone, especially people in vulnerable situations, has access to safe, nutritious, and sufficient food all year round. Hunger is often seen as a global issue, but it is also present on college campuses, including Georgia Tech.</p>
       </div>
     </div>
     <div class="wrap next">
@@ -423,7 +534,23 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
     </div>
   </section>
 
-  <section class="band dark">
+  <section class="band alt">
+    <div class="wrap two wide-right">
+      <div>
+        <div class="eyebrow">THE BIGGER CYCLE</div>
+        <h2 class="h2">Hunger in college can follow students for years.</h2>
+        <p class="body">Food insecurity is rarely a one-time problem. Poor nutrition makes it harder to do well in school, which can lead to lower-wage jobs, health problems, and more financial hardship. That hardship then makes food harder to afford, and the cycle continues, sometimes across generations.</p>
+        <p class="body">College is one of the points where this cycle can be broken. Making sure students have reliable access to food helps protect their health, their grades, and their chances of finishing a degree.</p>
+      </div>
+      <figure class="cycle-fig">
+        <img src="images/issue-cycle.png" alt="Diagram of the cycle of poverty and food insecurity: poverty leads to hard choices, poor nutrition, struggle in school, low-wage jobs, physical and mental health problems, expensive medical bills, and decreased ability to work, which leads back to poverty." onerror="this.closest('figure').remove()">
+        <figcaption>Diagram: Project Bread, "The Cycle of Poverty &amp; Food Insecurity"</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band dark photo-bg">
+    <img class="band-bg" src="images/issue-waste.jpg" alt="" onerror="this.remove()">
     <div class="wrap two stat-split">
       <div class="display" style="font-size: clamp(90px, 11vw, 150px); line-height: 0.9; color: var(--coral); white-space: nowrap"><span data-count="110">110</span> lb</div>
       <div>
@@ -610,6 +737,7 @@ p.body { font-size: 18px; line-height: 1.7; margin: 18px 0 0; }
           <p>United Nations. (n.d.). <i>Goal 2: Zero hunger</i>. <a href="https://sdgs.un.org/goals/goal2" target="_blank" rel="noopener">https://sdgs.un.org/goals/goal2</a></p>
           <p>[Intro video: add title, creator, and year] [Video]. YouTube. <a href="https://www.youtube.com/watch?v=QP7YROPBIkA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=QP7YROPBIkA</a></p>
           <p>[Photos: add a credit for each image, with the photographer or source and a link]</p>
+          <p>Project Bread. (n.d.). <i>The cycle of poverty &amp; food insecurity</i> [Diagram]. [Add link where you found it]</p>
         </div>
       </div>
     </div>
@@ -905,7 +1033,104 @@ ROLES.forEach(function (r, i) {
 });
 pickRole(0);
 
+// Audience buttons on Home open the matching role on Get Involved.
+document.querySelectorAll('[data-role]').forEach(function (a) {
+  a.addEventListener('click', function () { pickRole(parseInt(a.getAttribute('data-role'), 10)); });
+});
+
+// ---------- Intro overlay ----------
+var intro = document.getElementById('intro');
+var introLines = intro.querySelectorAll('.intro-line');
+var introSkip = document.getElementById('intro-skip');
+var introProgress = document.getElementById('intro-progress');
+var introReopen = document.getElementById('intro-reopen');
+var INTRO_MS = 8500;
+var LINE_TIMES = [300, 1900, 3500];
+var introTimers = [];
+var introSeen = false;
+var currentView = 'home';
+
+function clearIntroTimers() {
+  introTimers.forEach(clearTimeout);
+  introTimers = [];
+}
+
+function updateReopen() {
+  introReopen.hidden = !(introSeen && intro.hidden && currentView === 'home');
+}
+
+function openIntro() {
+  clearIntroTimers();
+  intro.hidden = false;
+  intro.classList.remove('leaving');
+  document.documentElement.classList.add('intro-open');
+  introReopen.hidden = true;
+
+  introLines.forEach(function (l) { l.classList.remove('show'); });
+  introProgress.style.transition = 'none';
+  introProgress.style.width = '0';
+  void intro.offsetWidth;
+
+  if (REDUCED) {
+    introLines.forEach(function (l) { l.classList.add('show'); });
+  } else {
+    introLines.forEach(function (l, i) {
+      introTimers.push(setTimeout(function () { l.classList.add('show'); }, LINE_TIMES[i]));
+    });
+  }
+  introProgress.style.transition = 'width ' + INTRO_MS + 'ms linear';
+  introProgress.style.width = '100%';
+  introTimers.push(setTimeout(closeIntro, INTRO_MS));
+  introSkip.focus();
+}
+
+function closeIntro() {
+  if (intro.hidden || intro.classList.contains('leaving')) { return; }
+  clearIntroTimers();
+  intro.classList.add('leaving');
+  document.documentElement.classList.remove('intro-open');
+  setTimeout(function () {
+    intro.hidden = true;
+    intro.classList.remove('leaving');
+    introSeen = true;
+    updateReopen();
+  }, REDUCED ? 0 : 700);
+}
+
+intro.addEventListener('click', closeIntro);
+introReopen.addEventListener('click', openIntro);
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && !intro.hidden) { closeIntro(); }
+});
+
+window.addEventListener('hashchange', function () {
+  currentView = (location.hash || '#home').slice(1) || 'home';
+  updateReopen();
+});
+
+// ---------- Home photo band crossfade ----------
+(function () {
+  var band = document.querySelector('.photo-band');
+  if (!band || REDUCED) { return; }
+  var idx = 0;
+  setInterval(function () {
+    var slides = band.querySelectorAll('img.slide');
+    if (slides.length < 2) { return; }
+    slides[idx % slides.length].classList.remove('on');
+    idx = (idx + 1) % slides.length;
+    slides[idx].classList.add('on');
+  }, 5000);
+})();
+
 showView();
+
+// Play the intro when the site opens on the Home page.
+if ((location.hash || '#home') === '#home') {
+  openIntro();
+} else {
+  currentView = location.hash.slice(1);
+  introSeen = true;
+}
 </script>
 </body>
 </html>
